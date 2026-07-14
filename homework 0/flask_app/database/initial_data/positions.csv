@@ -1,5 +1,6 @@
 "position_id","inst_id","title","responsibilities","start_date","end_date"
-"1","1","Instructor","Teach classes; mostly NLP and Web design.","2019-01-01",NULL
-"2","1","Researcher","Perform research at interface of AI and healthcare.","2019-01-01",NULL
-"3","2","National Scholar","Helped the government plan the future of science","2021-01-01","2021-12-31"
-"4","3","Associate Director","Used data science to assess corporation and nations","2019-01-01","2020-01-01"
+"1","1","B.Sc. Computer Science Student","Completed coursework in Algorithms, AI, Machine Learning, Database Systems, and Software Engineering; maintained GPA 85.87 under wartime disruptions.","2020-01-01","2025-12-31"
+"2","2","Flutter Trainee","Completed hands-on training in Flutter and Dart for cross-platform mobile app development.","2023-01-01","2023-06-30"
+"3","3","Java Trainee","Completed hands-on training in Java programming and software development fundamentals.","2022-01-01","2022-06-30"
+"4","4","Medical Volunteer — Clinical Data & Operations Support","Served in cardiac and renal care units during active conflict; identified critical data fragmentation causing suboptimal clinical decisions for high-risk patients.","2023-01-01","2024-12-31"
+"5","5","Tops & Leaders Programme Participant","Selected for a national competitive recognition programme; completed training in English and Turkish language fundamentals and public speaking.","2021-01-01","2021-12-31"

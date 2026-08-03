@@ -1,0 +1,6 @@
+"inst_id","type","name","department","address","city","state","zip"
+"1","Academia","Al-Azhar University of Gaza","Computer Science",NULL,"Gaza","Gaza Strip",NULL
+"2","Industry","GazaSkyGeeks",NULL,NULL,"Gaza","Gaza Strip",NULL
+"3","Industry","TD Edrak",NULL,NULL,"Remote","Gaza Strip",NULL
+"4","Healthcare","Al-Shifa Medical Complex",NULL,NULL,"Gaza","Gaza Strip",NULL
+"5","Government","Palestinian Ministry of Education",NULL,NULL,"Gaza","Gaza Strip",NULL

@@ -1,0 +1,9 @@
+"experience_id","position_id","name","description","hyperlink","start_date","end_date"
+"1","1","WalkGuard-AI","Real-time clinical AI system using pose estimation (MediaPipe/OpenCV) to detect early-stage mobility disorders from live video.","https://github.com/kamalabuqamar20","2025-01-01",NULL
+"2","1","MedAI-Predict","AI-powered hospital management system using LSTM neural networks for patient flow forecasting, dynamic doctor allocation, and smart scheduling.","https://github.com/kamalabuqamar20","2025-01-01",NULL
+"3","1","MindCare-AI","NLP-driven conversational assistant for real-time emotion analysis, mood detection, and personalised mental health recommendations.","https://github.com/kamalabuqamar20","2024-01-01",NULL
+"4","1","AI Drowsiness Detection System","Safety-critical real-time system using dual-eye and head-pose tracking; triggers audio/visual alerts and automatic video logging upon drowsiness detection.","https://github.com/kamalabuqamar20","2025-01-01",NULL
+"5","2","E-Commerce Mobile App","Developed a cross-platform e-commerce mobile application using Flutter and Dart, featuring product browsing, cart management, and checkout flow.",NULL,"2023-01-01",NULL
+"6","3","Java Training Project","Built practical Java applications as part of structured software development training.",NULL,"2022-01-01",NULL
+"7","4","Doctor-Allocation Application","Independently designed and deployed a doctor-allocation application to optimise patient flow at peak hours.",NULL,"2023-01-01","2024-12-31"
+"8","5","Language & Public Speaking Training","Completed structured training in English and Turkish language basics, along with public speaking and presentation skills.",NULL,"2021-01-01","2021-12-31"

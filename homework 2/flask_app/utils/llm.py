@@ -6,6 +6,7 @@ and routes chat requests to specialized "expert" prompts.
 import os
 import re
 import requests
+from flask import session
 from jinja2 import Template
 
 # The URL we send our messages to.
@@ -115,10 +116,11 @@ def handle_ai_chat_request(db, role, message):
         return execute_read_query(db, output)
     if role == "Database Write Expert":
         return execute_write_action(db, output)
+    if role == "Database Semantic Search Expert":
+        return execute_semantic_search(db, output)
     if role == "Orchestrator":
         return run_orchestrator_plan(db, message, output)
     return output   # Content Expert -- output is already the final answer
-
 
 def execute_read_query(db, sql):
     """
@@ -130,6 +132,31 @@ def execute_read_query(db, sql):
         return str(db.query(sql))
     except Exception as error:
         print(f"Read Expert query failed: {error}")
+        return "Sorry, that question couldn't be answered."
+
+
+def execute_semantic_search(db, output):
+    """
+    Run the Database Semantic Search Expert's output.
+
+    Homework 2: this is a separate expert (its own role, its own executor
+    function here) rather than a second thing the Read Expert might say --
+    the Orchestrator picks this role instead of "Database Read Expert" in
+    its plan whenever a request names something by an abbreviation,
+    paraphrase, or general category that might not match the database's
+    exact wording (e.g. "MSU", "AI skills"). See semanticSearch() in
+    database.py for how the actual comparison works.
+
+    The expert is told (see llm_roles.csv) to respond with exactly one
+    line in the form "<table>|<search text>" -- deliberately the simplest
+    format that still carries both pieces of information, so parsing it
+    is one string split, not a regex.
+    """
+    try:
+        table, query_text = output.strip().split('|', 1)
+        return str(db.semanticSearch(table.strip(), query_text.strip()))
+    except Exception as error:
+        print(f"Semantic search failed: {error}")
         return "Sorry, that question couldn't be answered."
 
 
@@ -182,3 +209,58 @@ def run_orchestrator_plan(db, original_request, plan_text):
         "or these internal steps."
     )
     return send_message(original_request, synthesis_prompt)
+
+
+# ======================================================================
+# HOMEWORK 2 — HUMAN VALIDATION WORKFLOW
+#
+# The Write Expert above genuinely deletes/modifies rows via exec(). These
+# three functions gate that behind an explicit yes/no confirmation for any
+# message that looks destructive, instead of letting it run unsupervised.
+# ======================================================================
+
+DANGEROUS_KEYWORDS = ['delete', 'remove', 'clear', 'drop', 'destroy']
+
+
+def assess_message_risk(message):
+    """
+    Return True if `message` contains a keyword associated with a
+    destructive/irreversible database action.
+    """
+    lowered = message.lower()
+    return any(keyword in lowered for keyword in DANGEROUS_KEYWORDS)
+
+
+def request_human_validation(message):
+    """
+    Pause a risky request and ask the user to confirm before anything
+    runs. Stashes the original message in the Flask session under
+    'pending_validation' -- the NEXT message the user sends is then
+    checked (in socket_events.py) against that key, so it's interpreted
+    as the yes/no answer to THIS question rather than a new, unrelated
+    chat message.
+    """
+    session['pending_validation'] = message
+    return (
+        f'This looks like it could delete or modify data: "{message}". '
+        f'Are you sure you want to proceed? (yes/no)'
+    )
+
+
+def handle_validation_response(db, response):
+    """
+    Called instead of the normal chat flow whenever session has a
+    'pending_validation' entry waiting.
+    """
+    original_message = session['pending_validation']
+    normalized = response.strip().lower()
+
+    if normalized in ('yes', 'y'):
+        session.pop('pending_validation')
+        return handle_ai_chat_request(db, role="Orchestrator", message=original_message)
+
+    if normalized in ('no', 'n'):
+        session.pop('pending_validation')
+        return "Okay, I won't do that. The request was cancelled."
+
+    return f'Please answer "yes" or "no" -- do you want me to proceed with: "{original_message}"?'
